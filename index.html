@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MURAD OS - Voice Launcher</title>
+    <title>MURAD OS - Ultimate Cyber Launcher</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            background-color: #0d021a;
+            background-color: #05010a;
             color: #00ffcc;
             font-family: 'Courier New', Courier, monospace;
             display: flex;
@@ -14,67 +15,231 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
+            transition: background 0.3s;
         }
+
+        /* Matrix Arka Plan */
+        .matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
+            font-size: 14px;
+            color: #00ff00;
+            display: none;
+            word-wrap: break-word;
+        }
+
+        /* Ana Konteyner */
         .container {
+            position: relative;
+            z-index: 2;
             border: 2px solid #a100ff;
-            box-shadow: 0 0 15px #a100ff;
-            padding: 25px;
+            box-shadow: 0 0 25px #a100ff;
+            padding: 20px;
             border-radius: 12px;
             text-align: center;
-            width: 85%;
-            max-width: 400px;
-            background: rgba(13, 2, 26, 0.9);
+            width: 90%;
+            max-width: 420px;
+            background: rgba(13, 2, 26, 0.92);
         }
+
+        /* Üst Menü Butonu */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .menu-toggle-btn {
+            background: #a100ff;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 8px #a100ff;
+        }
+
         h1 {
             color: #fff;
-            text-shadow: 0 0 8px #a100ff;
-            margin-bottom: 5px;
+            text-shadow: 0 0 10px #a100ff;
+            margin: 0;
+            font-size: 1.4em;
         }
+
         .status {
             color: #00ff00;
-            font-size: 0.85em;
-            margin-bottom: 15px;
+            font-size: 0.75em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
+
         .terminal {
             background: #000;
             border: 1px solid #00ffcc;
             padding: 10px;
-            height: 160px;
+            height: 150px;
             overflow-y: auto;
             text-align: left;
-            font-size: 0.8em;
-            margin-bottom: 15px;
+            font-size: 0.75em;
+            margin-bottom: 10px;
             border-radius: 5px;
+            box-shadow: inset 0 0 10px rgba(0,255,204,0.2);
         }
-        button {
-            background: #a100ff;
+
+        .input-box {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .input-box input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #a100ff;
+            color: #00ffcc;
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+
+        .input-box button {
+            background: #330066;
+            color: #00ffcc;
+            border: 1px solid #a100ff;
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .voice-btn {
+            background: linear-gradient(45deg, #a100ff, #ff007f);
             color: white;
             border: none;
-            padding: 12px 20px;
-            font-size: 0.95em;
+            padding: 12px;
+            font-size: 0.85em;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 10px #a100ff;
+            box-shadow: 0 0 15px #a100ff;
             width: 100%;
+            letter-spacing: 1px;
         }
-        button:active {
-            transform: scale(0.98);
+
+        /* Açılır / Kapanır Yan Menü Panel */
+        .drawer-menu {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 280px;
+            height: 100%;
+            background: rgba(10, 0, 20, 0.98);
+            border-left: 2px solid #a100ff;
+            box-shadow: -5px 0 20px rgba(161, 0, 255, 0.5);
+            z-index: 10;
+            padding: 20px;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        .drawer-menu.open {
+            right: 0;
+        }
+
+        .drawer-menu h3 {
+            color: #fff;
+            margin-top: 0;
+            border-bottom: 1px solid #a100ff;
+            padding-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .menu-btn {
+            background: #1a0033;
+            color: #00ffcc;
+            border: 1px solid #a100ff;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8em;
+            transition: 0.2s;
+        }
+
+        .menu-btn:hover {
+            background: #a100ff;
+            color: #fff;
+        }
+
+        .delete-btn {
+            background: #990000 !important;
+            color: #fff !important;
+            border-color: #ff0000 !important;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* Kırmızı İmha Yanıp Sönme Efekti */
+        .self-destruct-active {
+            animation: redAlert 0.5s infinite alternate;
+        }
+
+        @keyframes redAlert {
+            from { background-color: #05010a; }
+            to { background-color: #550000; }
         }
     </style>
 </head>
 <body>
 
+<div class="matrix-bg" id="matrixBg">0101010 MURAD OS SECURE FIREWALL ACTIVE 101010 HACK THE SYSTEM 010101 10101001</div>
+
 <div class="container">
-    <h1>MURAD OS</h1>
-    <div class="status">[ VOICE LAUNCHER ACTIVE ]</div>
+    <div class="top-bar">
+        <h1>MURAD OS</h1>
+        <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()">[ ≡ MENÜ ]</button>
+    </div>
+    
+    <div class="status">[ SYSTEM V4.0 - ALL SYSTEMS GO ]</div>
 
     <div class="terminal" id="terminal">
-        > Murad OS Launcher initialized...<br>
-        > Press 'LISTEN' and speak.<br>
+        > Murad OS initialized successfully.<br>
+        > All 8 Plan Modules Loaded.<br>
+        > Press microphone or type 'yardım'.<br>
     </div>
 
-    <button onclick="startListening()">🎤 DINLE / KOMUT VER</button>
+    <div class="input-box">
+        <input type="text" id="cmdInput" placeholder="Komut yaz..." onkeydown="checkEnter(event)">
+        <button onclick="handleTypedCommand()">ÇALIŞTIR</button>
+    </div>
+
+    <button class="voice-btn" onclick="startListening()">🎤 SESLİ KOMUT VER (JARVIS)</button>
+</div>
+
+<!-- Yan Açılır Menü -->
+<div class="drawer-menu" id="drawerMenu">
+    <h3>siber KONTROL PANELSİ</h3>
+    <button class="menu-btn" onclick="runFromMenu('biyometrik')">🔒 Biyometrik Tarama</button>
+    <button class="menu-btn" onclick="runFromMenu('matrix')">💻 Matrix Modu</button>
+    <button class="menu-btn" onclick="runFromMenu('ip')">🛡️ IP / Siber Tarama</button>
+    <button class="menu-btn" onclick="runFromMenu('tiktok_radar')">📊 TikTok Algoritma Analizi</button>
+    <button class="menu-btn" onclick="runFromMenu('instagram')">📸 Instagram Aç</button>
+    <button class="menu-btn" onclick="runFromMenu('tiktok')">🎵 TikTok Aç</button>
+    <button class="menu-btn" onclick="runFromMenu('youtube')">▶️ YouTube Aç</button>
+    <button class="menu-btn" onclick="runFromMenu('imha')">🚨 Kendi Kendini İmha Et</button>
+    <button class="menu-btn" onclick="toggleMenu()">❌ Menüyü Kapat</button>
+    <button class="menu-btn delete-btn" onclick="removeMenuCompletely()">🗑️ MENÜYÜ SİL / GİZLE</button>
 </div>
 
 <script>
@@ -85,22 +250,110 @@
         terminal.scrollTop = terminal.scrollHeight;
     }
 
+    function speak(message) {
+        if ('speechSynthesis' in window) {
+            const speech = new SpeechSynthesisUtterance(message);
+            speech.lang = 'tr-TR';
+            speech.rate = 1.0;
+            window.speechSynthesis.speak(speech);
+        }
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById('drawerMenu');
+        menu.classList.toggle('open');
+    }
+
+    // Menüyü Ekranda Tamamen Silme Fonksiyonu
+    function removeMenuCompletely() {
+        const menu = document.getElementById('drawerMenu');
+        const btn = document.getElementById('menuToggleBtn');
+        if (menu) menu.remove();
+        if (btn) btn.remove();
+        log("MENÜ PANELİ EKRANDAN TEMİZLENDİ.");
+        speak("Menü paneli gizlendi.");
+    }
+
+    function runFromMenu(cmd) {
+        toggleMenu();
+        executeCommand(cmd);
+    }
+
+    function executeCommand(cmd) {
+        cmd = cmd.toLowerCase().trim();
+        log(`Komut: "${cmd}"`);
+
+        if (cmd.includes("instagram")) {
+            log("Instagram yönlendiriliyor...");
+            speak("Instagram açılıyor efendim.");
+            setTimeout(() => { window.location.href = "https://instagram.com"; }, 1200);
+        } 
+        else if (cmd.includes("tiktok_radar") || cmd.includes("radar") || cmd.includes("analiz")) {
+            log("TikTok API Bağlantısı kuruluyor...");
+            log("> Profil: @Murad");
+            log("> Viral Algoritma Skoru: %98.4 [MÜKEMMEL]");
+            log("> Önerilen Paylaşım Saati: 21:00");
+            speak("TikTok algoritma analizi tamamlandı. Viral skorunuz yüzde 98.");
+        }
+        else if (cmd.includes("tiktok")) {
+            log("TikTok yönlendiriliyor...");
+            speak("TikTok başlatıldı.");
+            setTimeout(() => { window.location.href = "https://tiktok.com"; }, 1200);
+        } 
+        else if (cmd.includes("youtube")) {
+            log("YouTube yönlendiriliyor...");
+            speak("YouTube açılıyor.");
+            setTimeout(() => { window.location.href = "https://youtube.com"; }, 1200);
+        } 
+        else if (cmd.includes("biyometrik") || cmd.includes("kimlik")) {
+            log("Lazer tarama başlatıldı...");
+            log("[||||||||||||||||||||] %100");
+            log("BİYOMETRİK KİMLİK DOĞRULANDI.");
+            speak("Hoş geldiniz Murad bey. Kimliğiniz doğrulandı.");
+        }
+        else if (cmd.includes("matrix") || cmd.includes("hack")) {
+            log("SİBER MATRIX MODU AKTİF!");
+            document.getElementById('matrixBg').style.display = 'block';
+            speak("Matrix yağmuru aktif edildi.");
+        } 
+        else if (cmd.includes("ip") || cmd.includes("güvenlik") || cmd.includes("tarama")) {
+            log("IP: 192.168.1.58 [SECURE FIREWALL OK]");
+            log("Siber Tehdit: %0 (Korumalı)");
+            speak("IP ve güvenlik taraması temiz.");
+        } 
+        else if (cmd.includes("imha") || cmd.includes("destroy") || cmd.includes("sil")) {
+            document.body.classList.add('self-destruct-active');
+            log("UYARI: KENDİ KENDİNİ İMHA PROTOKOLÜ BAŞLATILDI!");
+            speak("Uyarı! Sistem imha ediliyor. Üç, iki, bir.");
+            setTimeout(() => {
+                terminal.innerHTML = "> SİSTEM ÇÖKTÜ. VERİLER SİLİNDİ.";
+            }, 4000);
+        }
+        else if (cmd.includes("yardım") || cmd.includes("help")) {
+            log("Komutlar: instagram, tiktok, youtube, matrix, ip, biyometrik, analiz, imha");
+            speak("Komut listesi ekranda.");
+        } 
+        else {
+            log(`Bilinmeyen komut: "${cmd}".`);
+            speak("Anlaşılamadı.");
+        }
+    }
+
     function startListening() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
         if (!SpeechRecognition) {
             log("Hata: Tarayıcınız ses tanımayı desteklemiyor.");
             return;
         }
 
         const recognition = new SpeechRecognition();
-        recognition.lang = 'tr-TR'; // Türkçe ses tanıma
+        recognition.lang = 'tr-TR';
 
-        log("Dinleniyor... Konuşun.");
+        log("Dinleniyor...");
+        speak("Dinliyorum.");
 
         recognition.onresult = function(event) {
-            const command = event.results[0][0].transcript.toLowerCase();
-            log(`Algılandı: "${command}"`);
+            const command = event.results[0][0].transcript;
             executeCommand(command);
         };
 
@@ -111,20 +364,17 @@
         recognition.start();
     }
 
-    function executeCommand(cmd) {
-        if (cmd.includes("instagram")) {
-            log("Instagram açılıyor...");
-            setTimeout(() => { window.location.href = "https://instagram.com"; }, 1000);
-        } else if (cmd.includes("youtube")) {
-            log("YouTube açılıyor...");
-            setTimeout(() => { window.location.href = "https://youtube.com"; }, 1000);
-        } else if (cmd.includes("tiktok")) {
-            log("TikTok açılıyor...");
-            setTimeout(() => { window.location.href = "https://tiktok.com"; }, 1000);
-        } else if (cmd.includes("sistem") || cmd.includes("durum")) {
-            log("Sistem durumu: %100 Çalışıyor. Murad OS Hazır.");
-        } else {
-            log("Komut anlaşılamadı. Şunları deneyin: 'Instagram', 'TikTok', 'YouTube', 'Sistem'.");
+    function handleTypedCommand() {
+        const input = document.getElementById('cmdInput');
+        if (input.value.trim() !== "") {
+            executeCommand(input.value);
+            input.value = "";
+        }
+    }
+
+    function checkEnter(event) {
+        if (event.key === 'Enter') {
+            handleTypedCommand();
         }
     }
 </script>
