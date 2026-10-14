@@ -1,92 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MURAD OS</title>
+    <title>MURAD OS - Voice Launcher</title>
     <style>
         body {
-            background-color: #08080c;
+            background-color: #0d021a;
             color: #00ffcc;
             font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 90vh;
-            overflow: hidden;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .card {
-            border: 2px solid #8a2be2;
-            box-shadow: 0 0 20px #8a2be2;
-            padding: 20px;
+        .container {
+            border: 2px solid #a100ff;
+            box-shadow: 0 0 15px #a100ff;
+            padding: 25px;
             border-radius: 12px;
-            width: 85%;
-            background: rgba(16, 16, 26, 0.9);
             text-align: center;
+            width: 85%;
+            max-width: 400px;
+            background: rgba(13, 2, 26, 0.9);
         }
         h1 {
             color: #fff;
-            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
-            letter-spacing: 3px;
+            text-shadow: 0 0 8px #a100ff;
             margin-bottom: 5px;
         }
         .status {
             color: #00ff00;
-            font-weight: bold;
-            font-size: 0.9em;
-            margin-bottom: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
         }
         .terminal {
+            background: #000;
+            border: 1px solid #00ffcc;
+            padding: 10px;
+            height: 160px;
+            overflow-y: auto;
             text-align: left;
             font-size: 0.8em;
-            color: #a9a9a9;
-            height: 120px;
-            overflow: hidden;
-            border-left: 2px solid #00ffcc;
-            padding-left: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
         }
-        .btn {
-            background: #8a2be2;
-            color: #fff;
+        button {
+            background: #a100ff;
+            color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 1em;
+            padding: 12px 20px;
+            font-size: 0.95em;
             font-weight: bold;
-            border-radius: 6px;
-            box-shadow: 0 0 10px #8a2be2;
+            border-radius: 8px;
             cursor: pointer;
-            letter-spacing: 2px;
+            box-shadow: 0 0 10px #a100ff;
+            width: 100%;
         }
-        .btn:active {
-            transform: scale(0.95);
+        button:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
-<div class="card">
+<div class="container">
     <h1>MURAD OS</h1>
-    <div class="status">[ SYSTEM: ACTIVE ]</div>
-    
-    <div class="terminal" id="term">
-        > Initializing core modules...<br>
-        > Bypass protocols: READY<br>
-        > Encrypted connection established.<br>
-        > Waiting for command...
+    <div class="status">[ VOICE LAUNCHER ACTIVE ]</div>
+
+    <div class="terminal" id="terminal">
+        > Murad OS Launcher initialized...<br>
+        > Press 'LISTEN' and speak.<br>
     </div>
 
-    <button class="btn" onclick="executeSystem()">EXECUTE</button>
+    <button onclick="startListening()">🎤 DINLE / KOMUT VER</button>
 </div>
 
 <script>
-    function executeSystem() {
-        let term = document.getElementById('term');
-        term.innerHTML += "<br><span style='color:#00ffcc;'>> ACCESS GRANTED. Welcome, Murad.</span>";
-        term.scrollTop = term.scrollHeight;
+    const terminal = document.getElementById('terminal');
+
+    function log(text) {
+        terminal.innerHTML += `> ${text}<br>`;
+        terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function startListening() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            log("Hata: Tarayıcınız ses tanımayı desteklemiyor.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'tr-TR'; // Türkçe ses tanıma
+
+        log("Dinleniyor... Konuşun.");
+
+        recognition.onresult = function(event) {
+            const command = event.results[0][0].transcript.toLowerCase();
+            log(`Algılandı: "${command}"`);
+            executeCommand(command);
+        };
+
+        recognition.onerror = function(event) {
+            log("Ses Hatası: " + event.error);
+        };
+
+        recognition.start();
+    }
+
+    function executeCommand(cmd) {
+        if (cmd.includes("instagram")) {
+            log("Instagram açılıyor...");
+            setTimeout(() => { window.location.href = "https://instagram.com"; }, 1000);
+        } else if (cmd.includes("youtube")) {
+            log("YouTube açılıyor...");
+            setTimeout(() => { window.location.href = "https://youtube.com"; }, 1000);
+        } else if (cmd.includes("tiktok")) {
+            log("TikTok açılıyor...");
+            setTimeout(() => { window.location.href = "https://tiktok.com"; }, 1000);
+        } else if (cmd.includes("sistem") || cmd.includes("durum")) {
+            log("Sistem durumu: %100 Çalışıyor. Murad OS Hazır.");
+        } else {
+            log("Komut anlaşılamadı. Şunları deneyin: 'Instagram', 'TikTok', 'YouTube', 'Sistem'.");
+        }
     }
 </script>
 
