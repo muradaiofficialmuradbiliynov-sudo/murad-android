@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MURAD OS</title>
+    <style>
+        body {
+            background-color: #08080c;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 90vh;
+            overflow: hidden;
+        }
+        .card {
+            border: 2px solid #8a2be2;
+            box-shadow: 0 0 20px #8a2be2;
+            padding: 20px;
+            border-radius: 12px;
+            width: 85%;
+            background: rgba(16, 16, 26, 0.9);
+            text-align: center;
+        }
+        h1 {
+            color: #fff;
+            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+        }
+        .status {
+            color: #00ff00;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        .terminal {
+            text-align: left;
+            font-size: 0.8em;
+            color: #a9a9a9;
+            height: 120px;
+            overflow: hidden;
+            border-left: 2px solid #00ffcc;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #8a2be2;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            box-shadow: 0 0 10px #8a2be2;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>MURAD OS</h1>
+    <div class="status">[ SYSTEM: ACTIVE ]</div>
+    
+    <div class="terminal" id="term">
+        > Initializing core modules...<br>
+        > Bypass protocols: READY<br>
+        > Encrypted connection established.<br>
+        > Waiting for command...
+    </div>
+
+    <button class="btn" onclick="executeSystem()">EXECUTE</button>
+</div>
+
+<script>
+    function executeSystem() {
+        let term = document.getElementById('term');
+        term.innerHTML += "<br><span style='color:#00ffcc;'>> ACCESS GRANTED. Welcome, Murad.</span>";
+        term.scrollTop = term.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
