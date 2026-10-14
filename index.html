@@ -2,103 +2,140 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MURAD OS - Delta Script Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MURAD-ANDROID UI</title>
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            background-color: #07030d;
-            color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace;
+            background-color: #030008;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
             overflow: hidden;
         }
 
-        /* Matrix Arka Plan */
-        .matrix-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.12;
-            font-size: 13px;
-            color: #a100ff;
-            display: none;
-            word-wrap: break-word;
-        }
-
-        /* Ana Delta Hub Paneli */
-        .container {
-            position: relative;
-            z-index: 2;
-            border: 2px solid #a100ff;
-            box-shadow: 0 0 30px rgba(161, 0, 255, 0.4);
-            padding: 15px;
-            border-radius: 10px;
+        /* Ana Panel - Nexus/Delta Tarzı */
+        .nexus-container {
             width: 92%;
-            max-width: 440px;
-            background: rgba(10, 2, 20, 0.95);
+            max-width: 380px;
+            height: 82vh;
+            background-color: rgba(10, 2, 20, 0.96);
+            border: 2px solid #a100ff;
+            border-radius: 12px;
+            box-shadow: 0 0 35px rgba(161, 0, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Üst Menü Çubuğu */
-        .top-bar {
+        /* Üst Header */
+        .header {
+            background-color: #15002b;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #330066;
-            padding-bottom: 8px;
-            margin-bottom: 10px;
+            border-bottom: 1px solid #a100ff;
         }
 
         .logo {
             color: #fff;
             font-weight: bold;
             font-size: 1.1em;
-            text-shadow: 0 0 8px #a100ff;
+            text-shadow: 0 0 10px #a100ff;
+            letter-spacing: 1px;
         }
 
-        .menu-toggle-btn {
-            background: #220044;
-            color: #00ffcc;
-            border: 1px solid #a100ff;
-            padding: 5px 10px;
-            font-size: 0.75em;
+        .status {
+            color: #00ff00;
+            font-size: 0.7em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 3px 6px;
             border-radius: 4px;
-            cursor: pointer;
+            border: 1px solid #00ff00;
         }
 
-        /* Lua Kod Editörü Alanı */
-        .editor-container {
-            position: relative;
-            background: #000000;
-            border: 1px solid #00ffcc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-shadow: inset 0 0 10px rgba(0,255,204,0.1);
+        /* Ana İçerik Alanı */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sol Menü İkonları */
+        .tabs {
+            width: 55px;
+            background-color: #06000f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 15px;
+            gap: 20px;
+            border-right: 1px solid #1a0033;
+        }
+
+        .tab-icon {
+            color: #a100ff;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tab-icon:hover, .tab-icon.active {
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        /* Sağ Kod Düzenleyici Bölgesi */
+        .editor-zone {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #010003;
+            padding: 5px;
         }
 
         textarea {
-            width: 100%;
-            height: 140px;
+            flex: 1;
             background: transparent;
             border: none;
             color: #00ffcc;
-            padding: 10px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.8em;
+            padding: 10px;
             resize: none;
             outline: none;
+            line-height: 1.4;
         }
 
-        /* Buton Grubu (Executor Controls) */
+        /* Alt Konsol Çıktısı */
+        .console {
+            height: 65px;
+            background-color: #06000f;
+            border-top: 1px solid #1a0033;
+            padding: 6px 10px;
+            font-size: 0.7em;
+            color: #88ffcc;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Buton Grubu */
         .btn-group {
+            padding: 10px;
             display: flex;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 8px;
+            background-color: #15002b;
+            border-top: 1px solid #a100ff;
         }
 
         .exec-btn {
@@ -109,119 +146,57 @@
             padding: 10px;
             font-size: 0.8em;
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 0 10px #a100ff;
+            box-shadow: 0 0 10px rgba(161, 0, 255, 0.6);
+            transition: 0.2s;
         }
 
-        .exec-btn:active { transform: scale(0.97); }
+        .exec-btn:active {
+            transform: scale(0.96);
+        }
 
         .clear-btn {
-            background: #330033;
+            background: #2b001a;
             color: #ff007f;
             border: 1px solid #ff007f;
-        }
-
-        /* Alt Terminal Çıktısı */
-        .output-console {
-            background: #020005;
-            border: 1px solid #330066;
-            padding: 8px;
-            height: 70px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 0.7em;
-            border-radius: 4px;
-            color: #88ffcc;
-        }
-
-        /* Açılır / Kapanır Yan Menü (Script Hub Kaynakları) */
-        .drawer-menu {
-            position: fixed;
-            top: 0; right: -100%;
-            width: 280px;
-            height: 100%;
-            background: rgba(10, 0, 20, 0.98);
-            border-left: 2px solid #a100ff;
-            z-index: 10;
-            padding: 20px;
-            transition: right 0.4s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            overflow-y: auto;
-        }
-
-        .drawer-menu.open { right: 0; }
-
-        .drawer-menu h3 {
-            color: #fff;
-            margin-top: 0;
-            border-bottom: 1px solid #a100ff;
-            padding-bottom: 6px;
-            font-size: 0.9em;
-        }
-
-        .hub-btn {
-            background: #15002b;
-            color: #00ffcc;
-            border: 1px solid #a100ff;
-            padding: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: left;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.75em;
-        }
-
-        .hub-btn:hover { background: #a100ff; color: #fff; }
-
-        .delete-menu-btn {
-            background: #660000 !important;
-            color: #fff !important;
-            border-color: #ff0000 !important;
-            margin-top: 10px;
-            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
         }
     </style>
 </head>
 <body>
 
-<div class="matrix-bg" id="matrixBg">loadstring(game:HttpGet("https://..."))() -- DELTA EXECUTOR ACTIVE -- ESP -- AIMBOT -- AUTO FARM</div>
-
-<div class="container" id="mainContainer">
-    <div class="top-bar">
-        <span class="logo">DELTA OS [v2.7]</span>
-        <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleMenu()">[ SCRIPT HUB ]</button>
+<div class="nexus-container">
+    <div class="header">
+        <span class="logo">MURAD-ANDROID</span>
+        <span class="status">INJECTED</span>
     </div>
 
-    <!-- Lua Kod Alanı -->
-    <div class="editor-container">
-        <textarea id="luaInput" placeholder="Lua script kodunu buraya yaz veya Script Hub'dan seç..."></textarea>
+    <div class="main-content">
+        <!-- Sol Sekmeler -->
+        <div class="tabs">
+            <div class="tab-icon active" title="Dashboard">🏠</div>
+            <div class="tab-icon" title="Executor">💻</div>
+            <div class="tab-icon" title="Script Hub">🌐</div>
+            <div class="tab-icon" title="Settings">⚙️</div>
+        </div>
+
+        <!-- Sağ Alan -->
+        <div class="editor-zone">
+            <textarea id="luaInput" placeholder="-- MURAD-ANDROID v1.0\n-- Paste your script or load from hub..."></textarea>
+            
+            <div class="console" id="consoleOutput">
+                > MURAD-ANDROID initialized successfully.<br>
+                > Mobile hook active. Ready to execute.<br>
+            </div>
+        </div>
     </div>
 
+    <!-- Kontrol Butonları -->
     <div class="btn-group">
-        <button class="exec-btn" onclick="executeScript()">EXECUTIVE</button>
-        <button class="exec-btn clear-btn" onclick="clearEditor()">CLEAR</button>
-        <button class="exec-btn" onclick="injectDelta()" style="background:#00aa55;">INJECT</button>
+        <button class="exec-btn" onclick="executeScript()">Execute</button>
+        <button class="exec-btn clear-btn" onclick="clearEditor()">Clear</button>
     </div>
-
-    <!-- Çıktı Konsolu -->
-    <div class="output-console" id="consoleOutput">
-        > Delta initialized. Waiting for injection...<br>
-    </div>
-</div>
-
-<!-- Yan Script Hub Menüsü -->
-<div class="drawer-menu" id="drawerMenu">
-    <h3>DELTA SCRIPT HUB</h3>
-    <button class="hub-btn" onclick="loadSnippet('farm')">⚡ Universal Auto-Farm Loader</button>
-    <button class="hub-btn" onclick="loadSnippet('esp')">👁️ ESP & Player View Toggle</button>
-    <button class="hub-btn" onclick="loadSnippet('speed')">🚀 WalkSpeed & JumpPower Bypass</button>
-    <button class="hub-btn" onclick="loadSnippet('matrix')">💻 Matrix / Visualizer Mode</button>
-    <button class="hub-btn" onclick="loadSnippet('custom')">🛠️ Custom Lua Script Template</button>
-    <button class="hub-btn" onclick="toggleMenu()">❌ Kapat</button>
-    <button class="hub-btn delete-menu-btn" onclick="removeMenuCompletely()">🗑️ MENÜYÜ EKRANDAN SİL</button>
 </div>
 
 <script>
@@ -233,60 +208,21 @@
         consoleOutput.scrollTop = consoleOutput.scrollHeight;
     }
 
-    function toggleMenu() {
-        document.getElementById('drawerMenu').classList.toggle('open');
-    }
-
-    function removeMenuCompletely() {
-        const menu = document.getElementById('drawerMenu');
-        const btn = document.getElementById('menuToggleBtn');
-        if (menu) menu.remove();
-        if (btn) btn.remove();
-        log("Script Hub menüsü arayüzden kaldırıldı.");
-    }
-
     function clearEditor() {
         luaInput.value = "";
-        log("Editör temizlendi.");
-    }
-
-    function injectDelta() {
-        log("Injecting to Roblox client...");
-        setTimeout(() => {
-            log("SUCCESS: Delta v2.7 Hooked Successfully!");
-        }, 800);
+        log("Editor cleared.");
     }
 
     function executeScript() {
         const code = luaInput.value.trim();
         if(!code) {
-            log("HATA: Çalıştırılacak Lua kodu bulunamadı!");
+            log("ERROR: No payload detected!");
             return;
         }
-        log("Executing Lua script...");
-        setTimeout(() => {
-            log("Script executed without errors.");
-        }, 1000);
-    }
-
-    function loadSnippet(type) {
-        toggleMenu();
-        if(type === 'farm') {
-            luaInput.value = "loadstring(game:HttpGet('https://raw.githubusercontent.com/delta-hub/universal-farm/main/loader.lua'))()\nprint('Auto Farm Loaded!')";
-            log("Auto-Farm script şablonu yüklendi.");
-        } else if(type === 'esp') {
-            luaInput.value = "local ESP = loadstring(game:HttpGet('https://raw.githubusercontent.com/delta-hub/esp/main/source.lua'))()\nESP:Toggle(true)";
-            log("ESP şablonu yüklendi.");
-        } else if(type === 'speed') {
-            luaInput.value = "game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100\ngame.Players.LocalPlayer.Character.Humanoid.JumpPower = 150";
-            log("Speed/Jump bypass yüklendi.");
-        } else if(type === 'matrix') {
-            document.getElementById('matrixBg').style.display = 'block';
-            log("Matrix arayüz görseli aktif edildi.");
-        } else if(type === 'custom') {
-            luaInput.value = "-- Murad OS Custom Lua Script\nlocal player = game.Players.LocalPlayer\nprint('Welcome, ' .. player.Name)";
-            log("Özel Lua şablonu yüklendi.");
-        }
+        log("Injecting payload...");
+        
+        setTimeout(() => { log("Bypassing client security checks..."); }, 400);
+        setTimeout(() => { log("SUCCESS: Script executed via MURAD-ANDROID."); }, 1000);
     }
 </script>
 
